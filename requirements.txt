@@ -1,0 +1,4 @@
+kafka-python==2.0.1
+tweepy==3.8.0
+elasticsearch==7.6.0
+flake8==3.7.9

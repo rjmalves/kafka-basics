@@ -1,0 +1,39 @@
+version: '3.5'
+networks:
+  kafka-cluster:
+    name: kafka-cluster
+    driver: bridge
+services: 
+  zookeeper-server:
+    restart: always
+    image: 'bitnami/zookeeper'
+    environment: 
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka-cluster
+    volumes:
+      - C:/Users/roger/.zookeeper_data:/bitnami/zookeeper
+  kafka-server:
+    depends_on: 
+      - zookeeper-server
+    restart: always
+    image: 'bitnami/kafka'
+    environment: 
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181
+    networks:
+      - kafka-cluster
+    volumes: 
+      - C:/Users/roger/.kafka_data:/bitnami/kafka
+  elasticsearch:
+    restart: always
+    image: 'elasticsearch:7.6.2'
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    networks:
+      - kafka-cluster
+    volumes:
+      - C:/Users/roger/.elasticsearch_data:/usr/share/elasticsearch/data
+    
